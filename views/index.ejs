@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Policy & Procedure</title>
+</head>
+<body>
+
+  <!-- Button that the user will click to fetch PDFs -->
+  <button id="policy-button">Policy & Procedure</button>
+
+  <!-- Container where the PDF links will be displayed -->
+  <div id="policy-container"></div>
+
+  <!-- JavaScript code to handle button click and fetch PDF links -->
+  <script>
+    // Add an event listener for the button
+    document.getElementById('policy-button').addEventListener('click', () => {
+      // Fetch the list of PDF files from the /policies endpoint
+      fetch('/policies')
+        .then(response => response.json())  // Convert the response to JSON
+        .then(data => {
+          const policyContainer = document.getElementById('policy-container');
+          policyContainer.innerHTML = '';  // Clear any previous content
+
+          // Loop through the PDF files and create links
+          data.forEach(pdf => {
+            const pdfLink = document.createElement('a');  // Create a new link
+            pdfLink.href = pdf.path;  // Set the href to the path of the PDF
+            pdfLink.textContent = pdf.name;  // Set the link text to the PDF name
+            pdfLink.target = '_blank';  // Open the PDF in a new tab
+            policyContainer.appendChild(pdfLink);  // Add the link to the container
+            policyContainer.appendChild(document.createElement('br'));  // Line break
+          });
+        })
+        .catch(error => {
+          console.error('Error fetching policy PDFs:', error);  // Log any errors
+        });
+    });
+  </script>
+
+</body>
+</html>
